@@ -6,6 +6,7 @@ import {
   WELL_COLS,
   DROP_FRAMES_DEFAULT,
   DROP_FRAMES_DECREMENT,
+  DROP_FRAMES_MAX,
   LINE_CLEAR_BONUSES,
 } from '../constants/grid';
 import { SHAPES, COLORS } from '../constants/tetromino';
@@ -587,9 +588,12 @@ function rewardClearedBlocks(game: Game, userId: UserId): Game {
       score: score + points,
       lines: lines + blocksCleared.length,
     }),
+    
     // Increase speed whenever a line is cleared (fast game)
     dropFrames: blocksCleared.length
-      ? dropFrames - DROP_FRAMES_DECREMENT
+      ? ( ( dropFrames - DROP_FRAMES_DECREMENT > DROP_FRAMES_MAX) 
+	? dropFrames - DROP_FRAMES_DECREMENT
+	: dropFrames )
       : dropFrames,
   };
 }
